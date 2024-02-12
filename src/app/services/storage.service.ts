@@ -3,57 +3,57 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 import { Article } from '../interfaces/Index';
 
+import { ToastController } from '@ionic/angular';
+
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
 
-  private _storage: Storage | null = null;
-  private _localArticles: Article[] = [];
+  noticias: Article[] = [];
 
-  constructor(private storage: Storage) { 
-    this.init();
+  constructor( private storage: Storage,
+               public toastController: ToastController) {
+
+    this.cargarFavoritos();
+
   }
 
-  get getLocalArticles() {
-    return [...this._localArticles];
+  async presentToast( message: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 1500
+    });
+    toast.present();
   }
 
 
-  async init() {
-    const storage = await this.storage.create();
-    this._storage = storage;
+  guardarNoticia( noticia: Article ) {
 
-    this.loadFavorites();
-  }
+    const existe = this.noticias.find( noti => noti.title === noticia.title );
 
-  async saveRemoveArticle(article: Article) {
-
-    const exists = this._localArticles.find( localArticle => localArticle.title === article.title);
-
-    if(exists){
-      this._localArticles = this._localArticles.filter( localArticle => localArticle.title !== article.title);
-    } else {
-      this._localArticles = [article, ...this._localArticles];
+    if ( !existe ) {
+      this.noticias.unshift( noticia );
+      this.storage.set('favoritos', this.noticias );
     }
 
-    this._storage?.set('articles', this._localArticles);
+    this.presentToast( 'Agregado a favorito' );
   }
 
-  async loadFavorites() {
-    try {
+  async cargarFavoritos() {
 
-      const articles = await this._storage?.get('articles');
-      this._localArticles = articles || [];
+    const favoritos = await this.storage.get('favoritos');
 
-    } catch (error) {
-      console.log('Error loading articles', error);
-      
+    if ( favoritos ) {
+      this.noticias = favoritos;
     }
   }
 
-  articleInFavorites(article: Article) {
-    return !!this._localArticles.find( localArticle => localArticle.title === article.title);
+  borrarNoticia( noticia: Article ) {
+
+    this.noticias = this.noticias.filter( noti => noti.title !== noticia.title );
+    this.storage.set('favoritos', this.noticias );
+    this.presentToast( 'Borrado de favoritos' );
   }
 
 

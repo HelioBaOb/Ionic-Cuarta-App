@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { StorageService } from '../../services/storage.service';
-import { Article } from 'src/app/interfaces/Index';
 
 @Component({
   selector: 'app-tab3',
@@ -9,10 +8,11 @@ import { Article } from 'src/app/interfaces/Index';
 })
 export class Tab3Page {
 
-  get articles(): Article[]{
-    return this.storageService.getLocalArticles;
-  }
+  sliderOpts = {
+    allowSlidePrev: false,
+    allowSlideNext: false
+  };
 
-  constructor(private storageService: StorageService) {}
+  constructor(public storageService: StorageService) {}
 
 }

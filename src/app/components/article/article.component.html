@@ -3,12 +3,12 @@
   <ion-card-subtitle class="ion-margin">
 
     <ion-row class="ion-align-items-center">
-      <ion-col class="ion-margin" (click)="openArticle()">
-        <span class="text-primary">{{ index }}. </span>
-        <span class="article-soruce-name">{{ article.source.name }}</span>
+      <ion-col class="ion-margin" (click)="abrirNoticia()">
+        <span class="text-primary">{{ indice + 1 }}. </span>
+        <span class="article-soruce-name">{{ noticia.source.name }}</span>
       </ion-col>
       <ion-col align="right">
-        <ion-button (click)="onOpenMenu()" fill="clear">
+        <ion-button (click)="lanzarMenu()" fill="clear">
           <ion-icon slot="icon-only" name="ellipsis-vertical-outline"></ion-icon>
         </ion-button>
       </ion-col>
@@ -17,16 +17,16 @@
 
   </ion-card-subtitle>
 
-  <ion-card-title (click)="openArticle()" class="ion-padding-horizontal ion-margin-bottom">
-    {{ article.title }}
+  <ion-card-title (click)="abrirNoticia()" class="ion-padding-horizontal ion-margin-bottom">
+    {{ noticia.title }}
   </ion-card-title>
 
-  <ion-img (click)="openArticle()" 
-    *ngIf="article.urlToImage" [src]="article.urlToImage">
+  <ion-img (click)="abrirNoticia()" 
+    *ngIf="noticia.urlToImage" [src]="noticia.urlToImage">
   </ion-img>
 
-  <ion-card-content *ngIf="article.description">
-    <p>{{ article.description }}</p>
+  <ion-card-content *ngIf="noticia.description">
+    <p>{{ noticia.description }}</p>
   </ion-card-content>
 
 </ion-card>

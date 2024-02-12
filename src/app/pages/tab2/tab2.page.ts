@@ -22,39 +22,39 @@ export class Tab2Page implements OnInit{
     'technology'
   ]
   public selectedCategory: string = this.categories[0];
-  public articles: Article[] = [];
+  public noticias: Article[] = [];
 
   constructor(private _newsService : NewsService) {}
 
   ngOnInit(){
     this._newsService.getTopHeadlinesByCategory(this.selectedCategory)
-    .subscribe(articles => {
-      console.log(articles);
-      this.articles = [...articles];
+    .subscribe(noticias => {
+      console.log(noticias);
+      this.noticias = [...noticias];
     })
   }
 
   segmentChanged(event:Event) {
     this.selectedCategory = (event as CustomEvent).detail.value;
     this._newsService.getTopHeadlinesByCategory(this.selectedCategory)
-    .subscribe(articles => {
-      console.log(articles);
-      this.articles = [...articles];
+    .subscribe(noticias => {
+      console.log(noticias);
+      this.noticias = [...noticias];
     })
   }
 
   loadData() {
     this._newsService.getTopHeadlinesByCategory(this.selectedCategory, true)
-      .subscribe(articles => {
+      .subscribe(noticias => {
 
-        if (articles.length === this.articles.length){
+        if (noticias.length === this.noticias.length){
           this.infiniteScroll.disabled = true;
           //event.target.disabled = true;
           console.log("Infinite Scroll Finished");
           return;
         }
 
-        this.articles = articles;
+        this.noticias = noticias;
         this.infiniteScroll.complete();
         //event.target.complete(); 
         console.log("Infinite Scroll Continue...");
